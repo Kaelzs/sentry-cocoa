@@ -41,6 +41,7 @@ class ViewController: UIViewController {
             }
         }
         
+        postPerson()
     }
     
     @IBAction func addBreadcrumb(_ sender: Any) {
@@ -96,16 +97,26 @@ class ViewController: UIViewController {
     }
     
     @IBAction func captureTransaction(_ sender: Any) {
-        let transaction = SentrySDK.startTransaction(name: "Some Transaction", operation: "Some Operation")
-        let span = transaction.startChild(operation: "user", description: "calls out")
+        let transaction = SentrySDK.startTransaction(name: "Load Messages", operation: "ui.load")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-            span.finish()
-        })
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.4...0.6), execute: {
-            transaction.finish()
-        })
+        let getMessagesSpan = transaction.startChild(operation: "http.client", description: "Fetch messages")
+        getMessages { messages in
+            getMessagesSpan.finish()
+            
+            let renderSpan = transaction.startChild(operation: "ui.render", description: "Render messages")
+            renderMessages(messages: messages)
+            renderSpan.finish()
+            transaction.finish(status: .ok)
+        }
+    }
+    
+    private func getMessages(completionHandler: ([String]) -> Void) {
+        delayNonBlocking(timeout: 0.3)
+        completionHandler([])
+    }
+    
+    private func renderMessages(messages: [String]) {
+        delayNonBlocking(timeout: 0.05)
     }
    
     @IBAction func crash(_ sender: Any) {
@@ -177,5 +188,50 @@ class ViewController: UIViewController {
     @IBAction func showNibController(_ sender: Any) {
         let nib = NibViewController()
         present(nib, animated: true, completion: nil)
+    }
+    
+    /**
+     * Makes a post request to locally running sentry-java spring boot sample https://github.com/getsentry/sentry-java/tree/main/sentry-samples/sentry-samples-spring-boot.
+     */
+    func postPerson() {
+        let parameters = ["firstName": "Philipp", "lastName": "Hofmann"]
+        
+        let url = URL(string: "http://localhost:8080/person/")!
+        
+        let session = URLSession.shared
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let base64Encoded = Data("user:password".utf8).base64EncodedString()
+        request.addValue("Basic \(base64Encoded)", forHTTPHeaderField: "Authorization")
+        
+        //create dataTask using the session object to send data to the server
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+            
+            if let error = error {
+                SentrySDK.capture(error: error)
+                return
+            }
+            
+            if let data = data {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        print(json)
+                    }
+                } catch let error {
+                    SentrySDK.capture(error: error)
+                }
+            }
+        })
+        task.resume()
     }
 }

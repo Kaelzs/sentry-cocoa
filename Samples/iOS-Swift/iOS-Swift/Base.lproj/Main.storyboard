@@ -77,7 +77,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8CV-WC-ffq">
                                         <rect key="frame" x="0.0" y="210" width="398" height="30"/>
-                                        <state key="normal" title="Test Navigation Transaction"/>
+                                        <state key="normal" title="HTTP Transaction"/>
                                         <connections>
                                             <segue destination="cay-7M-Gvd" kind="show" id="boD-GG-VVF"/>
                                         </connections>
@@ -159,10 +159,10 @@
             </objects>
             <point key="canvasLocation" x="132" y="139"/>
         </scene>
-        <!--Trace Test View Controller-->
+        <!--View Controller-->
         <scene sceneID="nC1-NO-4uj">
             <objects>
-                <viewController id="cay-7M-Gvd" customClass="TraceTestViewController" customModule="iOS_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cay-7M-Gvd" customClass="HTTPViewController" customModule="iOS_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="i9I-wJ-Z2B">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -194,7 +194,6 @@
         <!--Lorem Ipsum View Controller-->
         <scene sceneID="HP6-1Y-hca">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5Rz-Om-HMJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="2jd-n4-Ihk" customClass="LoremIpsumViewController" customModule="iOS_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hTi-ne-s8a">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
@@ -224,6 +223,7 @@
                         <outlet property="textView" destination="sla-j3-cfX" id="Xua-md-Bb1"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Rz-Om-HMJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1224.6376811594205" y="-148.66071428571428"/>
         </scene>

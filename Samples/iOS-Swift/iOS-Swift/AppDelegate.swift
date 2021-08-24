@@ -14,13 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         SentrySDK.start { options in
             options.dsn = dsn
-            options.beforeSend = { event in
-                return event
-            }
             options.debug = true
-            // Sampling 100% - In Production you probably want to adjust this
+            options.environment = "Workshop"
             options.tracesSampleRate = 1.0
-            options.sessionTrackingIntervalMillis = 5_000
         }
         
         return true

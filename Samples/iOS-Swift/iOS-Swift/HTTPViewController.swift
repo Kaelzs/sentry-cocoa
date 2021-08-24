@@ -2,7 +2,7 @@ import Foundation
 import Sentry
 import UIKit
 
-class TraceTestViewController: UIViewController {
+class HTTPViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
         
@@ -17,6 +17,7 @@ class TraceTestViewController: UIViewController {
             return
         }
         let session = URLSession(configuration: URLSessionConfiguration.default)
+        
         let dataTask = session.dataTask(with: imgUrl) { (data, _, error) in
             DispatchQueue.main.async {
                 if let err = error {
@@ -28,5 +29,6 @@ class TraceTestViewController: UIViewController {
         }
         
         dataTask.resume()
+        
     }
 }
