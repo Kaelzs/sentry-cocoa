@@ -10,7 +10,5 @@ static NSString *const SENTRY_INTERCEPTED_REQUEST = @"SENTRY_INTERCEPTED_REQUEST
 
 + (void)configureSessionConfiguration:(NSURLSessionConfiguration *)configuration;
 
-- (NSURLSession *)createSession;
-
 @end
 NS_ASSUME_NONNULL_END
