@@ -195,14 +195,9 @@ typedef void (^forward_to_delegate_challenge_handler_t)(void);
 
     id<NSURLSessionTaskDelegate> strongDelegate = self.originalDelegate;
 
-    [self.originalDelegateOperationQueue performSelector:@selector(handleChallengeWithBlock:) withObject:^{
+    [self.originalDelegateOperationQueue addOperationWithBlock:^{
         [strongDelegate URLSession:session task:task didReceiveChallenge:challenge completionHandler:completionHandler];
     }];
-}
-
-- (void)handleChallengeWithBlock:(forward_to_delegate_challenge_handler_t)block
-{
-    block();
 }
 
 @end
